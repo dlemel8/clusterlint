@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package doks
+package basic
 
 import (
 	"github.com/digitalocean/clusterlint/checks"
@@ -34,7 +34,7 @@ func (w *webhookTimeoutCheck) Name() string {
 
 // Groups returns a list of group names this check should be part of.
 func (w *webhookTimeoutCheck) Groups() []string {
-	return []string{"doks"}
+	return []string{"basic", "doks"}
 }
 
 // Description returns a detailed human-readable description of what this check
@@ -61,7 +61,7 @@ func (w *webhookTimeoutCheck) Run(objects *kube.Objects) ([]checks.Diagnostic, e
 				// Webhooks with TimeoutSeconds set: less than 1 or greater than or equal to 30 is bad.
 				d := checks.Diagnostic{
 					Severity: checks.Error,
-					Message:  "Validating webhook with a TimeoutSeconds value greater than 29 seconds will block upgrades.",
+					Message:  "Validating webhook with a TimeoutSeconds value greater than 29 seconds may add to API latency.",
 					Kind:     checks.ValidatingWebhookConfiguration,
 					Object:   &config.ObjectMeta,
 					Owners:   config.ObjectMeta.GetOwnerReferences(),
@@ -85,7 +85,7 @@ func (w *webhookTimeoutCheck) Run(objects *kube.Objects) ([]checks.Diagnostic, e
 				// Webhooks with TimeoutSeconds set: less than 1 or greater than or equal to 30 is bad.
 				d := checks.Diagnostic{
 					Severity: checks.Error,
-					Message:  "Mutating webhook with a TimeoutSeconds value greater than 29 seconds will block upgrades.",
+					Message:  "Mutating webhook with a TimeoutSeconds value greater than 29 seconds may add to API latency.",
 					Kind:     checks.MutatingWebhookConfiguration,
 					Object:   &config.ObjectMeta,
 					Owners:   config.ObjectMeta.GetOwnerReferences(),

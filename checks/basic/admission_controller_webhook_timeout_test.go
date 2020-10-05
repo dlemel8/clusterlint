@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package doks
+package basic
 
 import (
 	"testing"
@@ -30,7 +30,7 @@ import (
 func TestWebhookTimeoutCheckMeta(t *testing.T) {
 	webhookCheck := webhookTimeoutCheck{}
 	assert.Equal(t, "admission-controller-webhook-timeout", webhookCheck.Name())
-	assert.Equal(t, []string{"doks"}, webhookCheck.Groups())
+	assert.Equal(t, []string{"basic", "doks"}, webhookCheck.Groups())
 	assert.NotEmpty(t, webhookCheck.Description())
 }
 
@@ -220,14 +220,14 @@ func webhookTimeoutErrors() []checks.Diagnostic {
 	diagnostics := []checks.Diagnostic{
 		{
 			Severity: checks.Error,
-			Message:  "Validating webhook with a TimeoutSeconds value greater than 29 seconds will block upgrades.",
+			Message:  "Validating webhook with a TimeoutSeconds value greater than 29 seconds may add to API latency.",
 			Kind:     checks.ValidatingWebhookConfiguration,
 			Object:   &validatingConfig.ObjectMeta,
 			Owners:   validatingConfig.ObjectMeta.GetOwnerReferences(),
 		},
 		{
 			Severity: checks.Error,
-			Message:  "Mutating webhook with a TimeoutSeconds value greater than 29 seconds will block upgrades.",
+			Message:  "Mutating webhook with a TimeoutSeconds value greater than 29 seconds may add to API latency.",
 			Kind:     checks.MutatingWebhookConfiguration,
 			Object:   &mutatingConfig.ObjectMeta,
 			Owners:   mutatingConfig.ObjectMeta.GetOwnerReferences(),
